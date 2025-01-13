@@ -9,110 +9,66 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>proto-library</name>
 	<description>Demo project for Spring Boot</description>
+
+
 	<properties>
+		<java.version>17</java.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-		<protobuf.version>29.3</protobuf.version> <!-- Cập nhật với phiên bản protobuf bạn cần -->
-		<grpc.version>1.59.0</grpc.version>        <!-- Cập nhật với phiên bản gRPC bạn cần -->
 	</properties>
 
 	<dependencies>
-		<!-- gRPC dependencies -->
 		<dependency>
-			<groupId>io.grpc</groupId>
-			<artifactId>grpc-netty-shaded</artifactId>
-			<version>${grpc.version}</version>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.25.3</version>
+		</dependency>
+		<dependency>
+			<groupId>net.devh</groupId>
+			<artifactId>grpc-spring-boot-starter</artifactId>
+			<version>3.1.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>io.grpc</groupId>
-			<artifactId>grpc-protobuf</artifactId>
-			<version>${grpc.version}</version>
+			<artifactId>grpc-all</artifactId>
+			<version>1.65.0</version>
 		</dependency>
 		<dependency>
-			<groupId>io.grpc</groupId>
-			<artifactId>grpc-stub</artifactId>
-			<version>${grpc.version}</version>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.3.1</version>
 		</dependency>
 
-		<!-- Workaround for @Generated annotation on Java 9+ -->
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>annotations-api</artifactId>
-			<version>6.0.53</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>jakarta.annotation</groupId>
-			<artifactId>jakarta.annotation-api</artifactId>
-			<version>2.1.1</version>
-		</dependency>
 	</dependencies>
 
 	<build>
+		<sourceDirectory>${project.basedir}/src/main/proto</sourceDirectory>
 		<extensions>
 			<extension>
 				<groupId>kr.motd.maven</groupId>
 				<artifactId>os-maven-plugin</artifactId>
-				<version>1.7.0</version>
+				<version>1.7.1</version>
 			</extension>
 		</extensions>
-
 		<plugins>
-			<!-- Protobuf Plugin -->
 			<plugin>
 				<groupId>org.xolstice.maven.plugins</groupId>
 				<artifactId>protobuf-maven-plugin</artifactId>
 				<version>0.6.1</version>
 				<configuration>
-					<protocArtifact>
-						com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+					<protocArtifact>com.google.protobuf:protoc:3.5.0:exe:${os.detected.classifier}</protocArtifact>
 					<pluginId>grpc-java</pluginId>
 					<pluginArtifact>
-						io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
-					<outputDirectory>${project.basedir}/src/generated/main/java</outputDirectory>
+						io.grpc:protoc-gen-grpc-java:1.4.0:exe:${os.detected.classifier}
+					</pluginArtifact>
 				</configuration>
 				<executions>
 					<execution>
-						<id>compile-protobuf</id>
-						<phase>generate-sources</phase>
 						<goals>
 							<goal>compile</goal>
+							<goal>test-compile</goal>
 							<goal>compile-custom</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- Compiler Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<source>17</source>
-					<target>17</target>
-				</configuration>
-			</plugin>
-
-			<!-- Clean Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<id>clean-generated-sources</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-						<configuration>
-							<filesets>
-								<fileset>
-									<directory>${project.basedir}/src/generated</directory>
-								</fileset>
-							</filesets>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
