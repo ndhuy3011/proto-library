@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package user;
+
+option java_package = "com.ndhuy.proto_library.user";
+option java_outer_classname = "UserProto";
+
+message AuthRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message AuthResponse {
+    string uuid = 1;
+    string name = 2;
+    string email = 3;
+    bool is_valid = 4;
+}
+
+service UserService {
+    rpc Authenticate(AuthRequest) returns (AuthResponse);
+}
